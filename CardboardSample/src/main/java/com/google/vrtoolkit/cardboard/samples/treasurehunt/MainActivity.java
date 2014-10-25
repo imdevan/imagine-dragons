@@ -39,6 +39,8 @@ import java.nio.FloatBuffer;
 public class MainActivity extends CardboardActivity implements CardboardView.StereoRenderer {
 
     private static final String TAG = "MainActivity";
+    private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+    private Uri fileUri;
 
     private static final float CAMERA_Z = 0.01f;
     private static final float TIME_DELTA = 0.3f;
@@ -141,7 +143,18 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.common_ui);
+        setContentView(R.layout.main);
+
+        // create Intent to take a picture and return control to the calling application
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE); // create a file to save the image
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image file name
+
+        // start the image capture Intent
+        startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+
+        /*setContentView(R.layout.common_ui);
         CardboardView cardboardView = (CardboardView) findViewById(R.id.cardboard_view);
         cardboardView.setRenderer(this);
         setCardboardView(cardboardView);
@@ -157,7 +170,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
 
         mOverlayView = (CardboardOverlayView) findViewById(R.id.overlay);
-        mOverlayView.show3DToast("Pull the magnet when you find an object.");
+        mOverlayView.show3DToast("Pull the magnet when you find an object.");*/
     }
 
     @Override
